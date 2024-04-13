@@ -1,12 +1,12 @@
 // To parse this JSON data, do
 //
-//     final question = question(jsonString);
+//     final questionList = questionListFromJson(jsonString);
 
 import 'dart:convert';
 
-QuestionList QuestionFromJson(String str) => QuestionList.fromJson(json.decode(str));
+QuestionList questionListFromJson(String str) => QuestionList.fromJson(json.decode(str));
 
-String QuestionListToJson(QuestionList data) => json.encode(data.toJson());
+String questionListToJson(QuestionList data) => json.encode(data.toJson());
 
 class QuestionList {
     List<Datum> data;
@@ -27,10 +27,10 @@ class QuestionList {
 class Datum {
     int id;
     String question;
-    dynamic optionA;
-    OptionB optionB;
-    OptionC optionC;
-    OptionD optionD;
+    String optionA;
+    String optionB;
+    String optionC;
+    String optionD;
     String answer;
     String correctOption;
 
@@ -49,9 +49,9 @@ class Datum {
         id: json["id"],
         question: json["question"],
         optionA: json["option_a"],
-        optionB: optionBValues.map[json["option_b"]]!,
-        optionC: optionCValues.map[json["option_c"]]!,
-        optionD: optionDValues.map[json["option_d"]]!,
+        optionB: json["option_b"],
+        optionC: json["option_c"],
+        optionD: json["option_d"],
         answer: json["answer "],
         correctOption: json["correct_option"],
     );
@@ -60,52 +60,10 @@ class Datum {
         "id": id,
         "question": question,
         "option_a": optionA,
-        "option_b": optionBValues.reverse[optionB],
-        "option_c": optionCValues.reverse[optionC],
-        "option_d": optionDValues.reverse[optionD],
+        "option_b": optionB,
+        "option_c": optionC,
+        "option_d": optionD,
         "answer ": answer,
         "correct_option": correctOption,
     };
-}
-
-enum OptionB {
-    B,
-    NAMA_SI
-}
-
-final optionBValues = EnumValues({
-    "b": OptionB.B,
-    "nama si": OptionB.NAMA_SI
-});
-
-enum OptionC {
-    APA,
-    C
-}
-
-final optionCValues = EnumValues({
-    "apa": OptionC.APA,
-    "c": OptionC.C
-});
-
-enum OptionD {
-    D,
-    KAMU
-}
-
-final optionDValues = EnumValues({
-    "d": OptionD.D,
-    "kamu": OptionD.KAMU
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-        reverseMap = map.map((k, v) => MapEntry(v, k));
-        return reverseMap;
-    }
 }

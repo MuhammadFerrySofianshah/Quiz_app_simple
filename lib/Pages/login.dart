@@ -1,12 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quiz_app_simple/Models/qustion.dart';
 import 'package:quiz_app_simple/Pages/test.dart';
-import 'package:quiz_app_simple/Widgets/loading.dart';
 import 'package:quiz_app_simple/Widgets/widget.dart';
 
 class Login extends StatefulWidget {
@@ -21,28 +21,89 @@ class _LoginState extends State<Login> {
   final usernameController = TextEditingController();
 
   // get API
-  late QuestionList questionList;
-  late String username;
+  late QuestionList vQuestionList;
+  late String vUsername;
 
-  // link API
-  final String url =
-      "https://script.google.com/macros/s/AKfycbyidRYVGYJVdj-sgCMY_1TyVxHnaD96xAcWZC5bmixRF539UoFJ65TH2E59HbuOshSB/exec";
+  // cara pakai If Else
+  Future<void> vGetQuestionList(BuildContext context) async {
+    final vResponse = await http.get(Uri.parse(
+        "https://script.google.com/macros/s/AKfycbyidRYVGYJVdj-sgCMY_1TyVxHnaD96xAcWZC5bmixRF539UoFJ65TH2E59HbuOshSB/exec"));
 
-  // eksekusi Data API nya
-  Future<void> getAllData(String username) async {
-    try {
-      var responseAPI = await http.get(Uri.parse(url));
-      questionList = QuestionList.fromJson(json.decode(responseAPI.body));
+    if (vResponse.statusCode == 200) {
+      String vUsername = usernameController.text;
+      QuestionList vQuestionList = QuestionList.fromJson(
+          jsonDecode(vResponse.body) as Map<String, dynamic>);
       wOff(
           context,
           (context) => Test(
-                questionList: questionList,
-                username: username,
+                vUsername: vUsername,
+                vQuestionList: vQuestionList,
               ));
-    } catch (e, stackTrace) {
-      print('error:$e\n$stackTrace');
+    } else {
+      throw Exception('Terjadi Error');
     }
   }
+
+  // Future<void> vCheckInternet() async {
+  //   var vConnectivityResult = await (Connectivity().checkConnectivity());
+  //   if (vConnectivityResult == ConnectivityResult.none) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: wText('Error', Colors.redAccent, 18, FontWeight.bold),
+  //           content: wText(
+  //               'Not Connect Internet', blackColor, 16, FontWeight.normal),
+  //         );
+  //       },
+  //     );
+  //     print('di klik');
+  //   } else {
+  //     print('tidak bisa');
+  //   }
+  // }
+  bool vActiveConnect = false;
+  String T = "";
+  Future<void> vCheckInternet() async {
+    try {
+      final vResultInternet = await InternetAddress.lookup('google.com');
+      if (vResultInternet.isNotEmpty &&
+          vResultInternet[0].rawAddress.isNotEmpty) {
+        setState(() {
+          vActiveConnect = true;
+          T = "turn off the data and repress again";
+        });
+      }
+    } on SocketException catch (_) {
+      setState(
+        () {
+          vActiveConnect = false;
+          T = "Turn On the data and repress again";
+        },
+      );
+    }
+  }
+  @override
+  void initState() {
+    vCheckInternet();
+    super.initState();
+  }
+
+  // cara pakai Try catch
+  // final String vUrl =
+  //     "https://script.google.com/macros/s/AKfycbyidRYVGYJVdj-sgCMY_1TyVxHnaD96xAcWZC5bmixRF539UoFJ65TH2E59HbuOshSB/exec";
+  // void vGetQuestionList() async {
+  //   try {
+  //     var vResponseAPI = await http.get(Uri.parse(vUrl));
+  //     vQuestionList = QuestionList.fromJson(json.decode(vResponseAPI.body));
+  //     wOff(
+  //         context,
+  //         (context) => Test(
+  //               vQuestionList: vQuestionList,
+  //               vUsername: vUsername,
+  //             ));
+  //   } catch (e) {}
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +117,7 @@ class _LoginState extends State<Login> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -69,10 +130,12 @@ class _LoginState extends State<Login> {
               ),
               wSizedBoxHeight(20),
               ElevatedButton(
-                onPressed: () {
-                  getAllData(
-                    usernameController.text,
-                  );
+                onPressed: () async {
+                  // getAllData(
+                  //   usernameController.text,
+                  // );
+                  await vCheckInternet();
+                  vGetQuestionList(context);
                 },
                 child: wText('M U L A I', blueColor, 16, FontWeight.w500),
               ),

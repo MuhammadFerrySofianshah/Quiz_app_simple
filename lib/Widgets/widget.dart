@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Color orangeColor = const Color.fromARGB(255, 255, 136, 0);
-Color yellowColor = Color.fromARGB(235, 141, 108, 0);
+Color yellowColor = const Color.fromARGB(235, 141, 108, 0);
 Color blueColor = Colors.blue;
 Color greenColor = Colors.green;
 Color blackColor = const Color(0xff000000);
