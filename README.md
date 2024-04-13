@@ -1,8 +1,13 @@
 # quiz_app_simple
 
 ## Login
+![Screenshot 2024-04-13 184401](https://github.com/MuhammadFerrySofianshah/Quiz_app_simple/assets/113429157/71dc38ed-e402-49a2-9bd4-7b1b607d1461)
+
 ## Test
+![Screenshot 2024-04-13 184419](https://github.com/MuhammadFerrySofianshah/Quiz_app_simple/assets/113429157/6dccf926-f855-48ab-87d6-887786f8d6c6)
+
 ## Result
+![Screenshot 2024-04-13 184433](https://github.com/MuhammadFerrySofianshah/Quiz_app_simple/assets/113429157/4e1edf58-8088-4e1e-a30f-b7f8e91ff7e9)
 
 ## Link Sumber Belajar
 Part 1 : https://www.youtube.com/watch?v=jHGq2CLPGlU&t=0s
